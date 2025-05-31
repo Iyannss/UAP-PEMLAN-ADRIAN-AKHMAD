@@ -1,0 +1,133 @@
+import java.util.Scanner;
+
+interface Calculator {
+    double getVolume();
+    double getSurfaceArea();
+    double getMass();
+}
+
+interface MassConverter {
+    double toKg();
+}
+
+interface ShippingCost {
+    int getCost();
+}
+
+abstract class Donat implements Calculator, MassConverter, ShippingCost {
+    protected static final double PI = 22.0 / 7.0;
+    protected static final double DENSITY = 8.0;     // gram/cm³
+    protected static final double THICKNESS = 0.5;   // cm
+
+    public abstract void printInfo();
+}
+
+class Torus extends Donat {
+    private double R;
+    private double r;
+
+    public Torus(double R, double r) {
+        this.R = R;
+        this.r = r;
+    }
+
+    public double getVolume() {
+        return 2 * PI * PI * R * r * r;
+    }
+
+    public double getSurfaceArea() {
+        return 4 * PI * PI * R * r;
+    }
+
+    public double getMass() {
+        return getSurfaceArea() * THICKNESS * DENSITY;
+    }
+
+    public double toKg() {
+        return getMass() / 1000.0;
+    }
+
+    public int getCost() {
+        return (int) Math.ceil(toKg()) * 2000;
+    }
+
+    public void printInfo() {
+        System.out.printf("Volume          : %, .2f%n", getVolume());
+        System.out.printf("Luas permukaan  : %, .2f%n", getSurfaceArea());
+        System.out.printf("Massa           : %, .2f gr%n", getMass());
+        System.out.printf("Massa dalam kg  : %.2f kg%n", toKg());
+        System.out.printf("Biaya kirim     : Rp %,d%n", getCost());
+    }
+}
+
+class Sphere extends Donat {
+    private double r;
+
+    public Sphere(double r) {
+        this.r = r;
+    }
+
+    public double getVolume() {
+        return (4.0 / 3.0) * PI * r * r * r;
+    }
+
+    public double getSurfaceArea() {
+        return 4 * PI * r * r;
+    }
+
+    public double getMass() {
+        return getSurfaceArea() * THICKNESS * DENSITY;
+    }
+
+    public double toKg() {
+        return getMass() / 1000.0;
+    }
+
+    public int getCost() {
+        return (int) Math.ceil(toKg()) * 2000;
+    }
+
+    public void printInfo() {
+        System.out.printf("Volume          : %, .2f%n", getVolume());
+        System.out.printf("Luas permukaan  : %, .2f%n", getSurfaceArea());
+        System.out.printf("Massa           : %, .2f gr%n", getMass());
+        System.out.printf("Massa dalam kg  : %.2f kg%n", toKg());
+        System.out.printf("Biaya kirim     : Rp %,d%n", getCost());
+    }
+}
+
+public class KalkulatorPabrik {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("=============================================");
+        System.out.println("Kalkulator Pabrik Cetakan Donat Rumahan Iyann");
+        System.out.println("Adrian Akhmad Abyaz Triyono");
+        System.out.println("245150707111020");
+        System.out.println("=============================================");
+
+        System.out.println("Donat dengan lubang");
+        System.out.println("=============================================");
+        System.out.print("Isikan Major Radius : ");
+        double R = sc.nextDouble(); // nanti kalo diminta ini isi 7
+        System.out.print("Isikan minor radius : ");
+        double r = sc.nextDouble(); // nanti kalo diminta ini isi 3.5
+        System.out.println("=============================================");
+
+        Torus torus = new Torus(R, r);
+        torus.printInfo();
+        System.out.println("=============================================");
+
+        System.out.println("Donat tanpa lubang");
+        System.out.println("=============================================");
+        System.out.print("Isikan radius   : ");
+        double radius = sc.nextDouble(); // nanti kalo diminta ini isi 21
+        System.out.println("=============================================");
+
+        Sphere sphere = new Sphere(radius);
+        sphere.printInfo();
+        System.out.println("=============================================");
+
+        sc.close();
+    }
+}
